@@ -230,8 +230,48 @@
       };
       document.addEventListener('keydown', this.keyHandler);
 
+      // Touch/swipe support for mobile
+      this.setupTouchNavigation(lightbox);
+
       // Animate in
       setTimeout(() => lightbox.classList.add('tg-lightbox-visible'), 10);
+    }
+
+    /**
+     * Setup touch/swipe navigation for mobile
+     */
+    setupTouchNavigation(lightbox) {
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      const imageContainer = lightbox.querySelector('.tg-lightbox-image-container');
+
+      imageContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      imageContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe(touchStartX, touchEndX);
+      }, { passive: true });
+    }
+
+    /**
+     * Handle swipe gesture
+     */
+    handleSwipe(startX, endX) {
+      const swipeThreshold = 50; // minimum distance for swipe
+      const diff = startX - endX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Swiped left - next image
+          this.nextImage();
+        } else {
+          // Swiped right - previous image
+          this.prevImage();
+        }
+      }
     }
 
     /**
@@ -245,10 +285,33 @@
       const caption = lightbox.querySelector('.tg-lightbox-caption');
       const counter = lightbox.querySelector('.tg-lightbox-counter');
 
-      img.src = image.fullUrl;
+      // Show loading state
+      img.style.opacity = '0';
+
+      // Use high-res thumbnail URL instead of fullUrl (better compatibility)
+      const imageUrl = image.thumbnailUrl
+        ? image.thumbnailUrl.replace(/=s\d+/, '=s2000')  // Request 2000px version
+        : image.fullUrl;
+
+      img.src = imageUrl;
       img.alt = image.name;
       caption.textContent = image.name;
       counter.textContent = `${this.currentImageIndex + 1} / ${this.images.length}`;
+
+      // Fade in when loaded
+      img.onload = () => {
+        img.style.opacity = '1';
+        img.style.transition = 'opacity 0.3s';
+      };
+
+      // Handle load error - fallback to fullUrl
+      img.onerror = () => {
+        if (img.src !== image.fullUrl) {
+          img.src = image.fullUrl;
+        } else {
+          console.error('Failed to load image:', image.name);
+        }
+      };
 
       // Show/hide nav buttons
       lightbox.querySelector('.tg-lightbox-prev').style.display =
