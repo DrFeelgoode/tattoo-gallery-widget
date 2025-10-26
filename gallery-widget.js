@@ -288,10 +288,11 @@
       // Show loading state
       img.style.opacity = '0';
 
-      // Use high-res thumbnail URL instead of fullUrl (better compatibility)
+      // IMPORTANT: Only use thumbnail URLs - they have proper CORS headers
+      // Google Drive's "uc?export=view" URLs are blocked by browser CORS policy
       const imageUrl = image.thumbnailUrl
-        ? image.thumbnailUrl.replace(/=s\d+/, '=s2000')  // Request 2000px version
-        : image.fullUrl;
+        ? image.thumbnailUrl.replace(/=s\d+/, '=s2000')  // Request 2000px high-res version
+        : image.thumbnailUrl;  // Always use thumbnail URL
 
       img.src = imageUrl;
       img.alt = image.name;
@@ -304,13 +305,10 @@
         img.style.transition = 'opacity 0.3s';
       };
 
-      // Handle load error - fallback to fullUrl
+      // Handle load error
       img.onerror = () => {
-        if (img.src !== image.fullUrl) {
-          img.src = image.fullUrl;
-        } else {
-          console.error('Failed to load image:', image.name);
-        }
+        console.error('Failed to load image:', image.name);
+        caption.textContent = `${image.name} (Failed to load)`;
       };
 
       // Show/hide nav buttons
