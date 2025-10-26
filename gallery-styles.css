@@ -41,6 +41,15 @@
   max-width: 100%;
   margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Ensure all child elements respect box-sizing */
+.tattoo-gallery *,
+.tattoo-gallery *::before,
+.tattoo-gallery *::after {
+  box-sizing: border-box;
 }
 
 /* Gallery Grid */
@@ -82,10 +91,8 @@
   border-radius: var(--tg-border-radius);
   background: #f0f0f0;
   cursor: pointer;
-  aspect-ratio: 1 / 1;
   width: 100%;
-  height: 0;
-  padding-bottom: 100%; /* Force perfect square */
+  padding-bottom: 100%; /* Force perfect square (1:1 aspect ratio) */
 }
 
 .tg-img {
@@ -237,9 +244,11 @@
 .tg-lightbox-image {
   max-width: 100%;
   max-height: 100%;
+  width: auto;
   height: auto;
   border-radius: var(--tg-border-radius);
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  object-fit: contain; /* Ensure image fits within container */
 }
 
 .tg-lightbox-caption {
