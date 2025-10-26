@@ -222,6 +222,15 @@
       lightbox.querySelector('.tg-lightbox-prev').addEventListener('click', () => this.prevImage());
       lightbox.querySelector('.tg-lightbox-next').addEventListener('click', () => this.nextImage());
 
+      // Close when clicking outside image (on content area, but not on image/buttons/caption)
+      const content = lightbox.querySelector('.tg-lightbox-content');
+      content.addEventListener('click', (e) => {
+        // Only close if clicking directly on the content area (not on child elements)
+        if (e.target === content) {
+          this.closeLightbox();
+        }
+      });
+
       // Keyboard navigation
       this.keyHandler = (e) => {
         if (e.key === 'Escape') this.closeLightbox();
