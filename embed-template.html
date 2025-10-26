@@ -1,0 +1,129 @@
+<!--
+  TATTOO GALLERY - EMBED CODE FOR GHL
+  ====================================
+
+  INSTRUCTIONS:
+  1. Replace YOUR_FOLDER_ID with your Google Drive folder ID
+  2. Customize the branding colors in the <style> section (optional)
+  3. Copy this entire code block into GHL's Custom Code widget
+
+  WHERE TO GET YOUR FOLDER ID:
+  - Open your Google Drive folder
+  - Look at the URL: https://drive.google.com/drive/folders/ABC123XYZ
+  - Your folder ID is: ABC123XYZ
+
+  Note: Make sure you've shared the folder with the service account!
+-->
+
+<!-- Gallery Container -->
+<div class="tattoo-gallery" data-folder-id="YOUR_FOLDER_ID"></div>
+
+<!-- Gallery Styles -->
+<link rel="stylesheet" href="https://YOUR_CDN_URL/gallery-styles.css">
+
+<!-- Gallery Script -->
+<script src="https://YOUR_CDN_URL/gallery-widget.js"></script>
+
+<!-- Custom Branding (OPTIONAL - Customize These Colors!) -->
+<style>
+  .tattoo-gallery {
+    /* PRIMARY BRAND COLOR - used for accents, buttons, highlights */
+    --tg-primary-color: #e74c3c;
+
+    /* BACKGROUND COLOR */
+    --tg-bg-color: #ffffff;
+
+    /* TEXT COLOR */
+    --tg-text-color: #333333;
+
+    /* LIGHTBOX OVERLAY (the dark background when viewing full images) */
+    --tg-overlay-color: rgba(0, 0, 0, 0.85);
+
+    /* SPACING between images (in pixels) */
+    --tg-gap: 16px;
+
+    /* BORDER RADIUS - how rounded the corners are (0 = square) */
+    --tg-border-radius: 8px;
+
+    /* GRID COLUMNS - how many images per row */
+    --tg-columns-mobile: 1;   /* Phone: 1 column */
+    --tg-columns-tablet: 2;   /* Tablet: 2 columns */
+    --tg-columns-desktop: 3;  /* Desktop: 3 columns */
+
+    /* HOVER EFFECTS */
+    --tg-hover-scale: 1.05;      /* Image zoom on hover (1.0 = no zoom, 1.1 = bigger zoom) */
+    --tg-hover-brightness: 1.1;  /* Image brightness on hover (1.0 = no change) */
+
+    /* ANIMATION SPEED in seconds */
+    --tg-transition-speed: 0.3s;
+  }
+</style>
+
+<!--
+  ========================================
+  BRANDING EXAMPLES - Copy & paste these!
+  ========================================
+
+  DARK THEME with RED accents:
+  -----------------------------
+  <style>
+    .tattoo-gallery {
+      --tg-primary-color: #ff4444;
+      --tg-bg-color: #1a1a1a;
+      --tg-text-color: #ffffff;
+    }
+  </style>
+
+  MINIMAL BLACK & WHITE:
+  ----------------------
+  <style>
+    .tattoo-gallery {
+      --tg-primary-color: #000000;
+      --tg-bg-color: #ffffff;
+      --tg-text-color: #000000;
+      --tg-hover-scale: 1.02;
+      --tg-border-radius: 0;
+    }
+  </style>
+
+  TIGHT GRID (4 columns, small gaps):
+  ------------------------------------
+  <style>
+    .tattoo-gallery {
+      --tg-columns-desktop: 4;
+      --tg-columns-tablet: 3;
+      --tg-gap: 8px;
+    }
+  </style>
+
+  WIDE MASONRY LAYOUT (2 columns, big gaps):
+  -------------------------------------------
+  <style>
+    .tattoo-gallery {
+      --tg-columns-desktop: 2;
+      --tg-columns-tablet: 2;
+      --tg-gap: 24px;
+      --tg-border-radius: 12px;
+    }
+  </style>
+
+  NO ANIMATIONS (instant, no hover effects):
+  ------------------------------------------
+  <style>
+    .tattoo-gallery {
+      --tg-hover-scale: 1.0;
+      --tg-hover-brightness: 1.0;
+      --tg-transition-speed: 0s;
+    }
+  </style>
+
+  CUSTOM BRAND COLORS:
+  --------------------
+  <style>
+    .tattoo-gallery {
+      --tg-primary-color: #YOUR_BRAND_COLOR;
+      --tg-bg-color: #YOUR_BG_COLOR;
+      --tg-text-color: #YOUR_TEXT_COLOR;
+    }
+  </style>
+-->

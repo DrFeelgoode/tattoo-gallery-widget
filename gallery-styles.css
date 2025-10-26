@@ -1,0 +1,430 @@
+/**
+ * Tattoo Gallery Styles
+ *
+ * EASY CUSTOMIZATION:
+ * Change the CSS variables in .tattoo-gallery to customize colors, spacing, etc.
+ * See examples at the bottom of this file.
+ */
+
+.tattoo-gallery {
+  /* ============================================
+     BRANDING VARIABLES - CUSTOMIZE THESE!
+     ============================================ */
+
+  /* Colors */
+  --tg-primary-color: #e74c3c;        /* Accent color (buttons, highlights) */
+  --tg-bg-color: #ffffff;             /* Background color */
+  --tg-text-color: #333333;           /* Text color */
+  --tg-overlay-color: rgba(0,0,0,0.8); /* Lightbox overlay */
+
+  /* Spacing */
+  --tg-gap: 16px;                     /* Gap between images */
+  --tg-border-radius: 8px;            /* Corner roundness */
+
+  /* Grid */
+  --tg-columns-mobile: 1;             /* Columns on phone */
+  --tg-columns-tablet: 2;             /* Columns on tablet */
+  --tg-columns-desktop: 3;            /* Columns on desktop */
+
+  /* Hover Effect */
+  --tg-hover-scale: 1.05;             /* Image zoom on hover (1.0 = no zoom) */
+  --tg-hover-brightness: 1.1;         /* Image brightness on hover */
+
+  /* Animations */
+  --tg-transition-speed: 0.3s;        /* Animation speed */
+
+  /* ============================================
+     END CUSTOMIZATION VARIABLES
+     ============================================ */
+
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Gallery Grid */
+.tg-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--tg-columns-mobile), 1fr);
+  gap: var(--tg-gap);
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .tg-grid {
+    grid-template-columns: repeat(var(--tg-columns-tablet), 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tg-grid {
+    grid-template-columns: repeat(var(--tg-columns-desktop), 1fr);
+  }
+}
+
+/* Gallery Item */
+.tg-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--tg-transition-speed), transform var(--tg-transition-speed);
+}
+
+.tg-item.tg-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tg-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--tg-border-radius);
+  background: #f0f0f0;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+}
+
+.tg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--tg-transition-speed), filter var(--tg-transition-speed);
+  opacity: 0;
+}
+
+.tg-img.tg-loaded {
+  opacity: 1;
+}
+
+.tg-img-wrapper:hover .tg-img {
+  transform: scale(var(--tg-hover-scale));
+  filter: brightness(var(--tg-hover-brightness));
+}
+
+/* Overlay (appears on hover) */
+.tg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--tg-transition-speed);
+}
+
+.tg-img-wrapper:hover .tg-overlay {
+  opacity: 1;
+}
+
+.tg-icon {
+  width: 48px;
+  height: 48px;
+  color: white;
+}
+
+/* Loading State */
+.tg-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--tg-text-color);
+}
+
+.tg-spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 4px solid #f0f0f0;
+  border-top-color: var(--tg-primary-color);
+  border-radius: 50%;
+  animation: tg-spin 1s linear infinite;
+}
+
+@keyframes tg-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.tg-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.tg-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  opacity: 0.5;
+}
+
+/* Error State */
+.tg-error {
+  text-align: center;
+  padding: 60px 20px;
+  color: #e74c3c;
+}
+
+.tg-error-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+}
+
+/* ============================================
+   LIGHTBOX STYLES
+   ============================================ */
+
+.tg-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--tg-transition-speed), visibility var(--tg-transition-speed);
+}
+
+.tg-lightbox.tg-lightbox-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tg-lightbox-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--tg-overlay-color);
+  cursor: pointer;
+}
+
+.tg-lightbox-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1;
+}
+
+.tg-lightbox-image-container {
+  max-width: 90%;
+  max-height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tg-lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  border-radius: var(--tg-border-radius);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.tg-lightbox-caption {
+  color: white;
+  margin-top: 20px;
+  font-size: 16px;
+  text-align: center;
+  max-width: 600px;
+}
+
+.tg-lightbox-counter {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  font-size: 14px;
+  background: rgba(0,0,0,0.5);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.tg-lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--tg-transition-speed), transform var(--tg-transition-speed);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.tg-lightbox-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
+}
+
+.tg-lightbox-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.tg-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--tg-transition-speed), transform var(--tg-transition-speed);
+  color: white;
+  backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.tg-lightbox-nav:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.tg-lightbox-prev {
+  left: 20px;
+}
+
+.tg-lightbox-prev:hover {
+  transform: translateY(-50%) translateX(-5px);
+}
+
+.tg-lightbox-next {
+  right: 20px;
+}
+
+.tg-lightbox-next:hover {
+  transform: translateY(-50%) translateX(5px);
+}
+
+.tg-lightbox-nav svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Mobile Lightbox Adjustments */
+@media (max-width: 640px) {
+  .tg-lightbox-content {
+    padding: 10px;
+  }
+
+  .tg-lightbox-image-container {
+    max-width: 95%;
+    max-height: 70%;
+  }
+
+  .tg-lightbox-counter {
+    top: 10px;
+    left: 10px;
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .tg-lightbox-close {
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .tg-lightbox-close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .tg-lightbox-nav {
+    width: 48px;
+    height: 48px;
+  }
+
+  .tg-lightbox-nav svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .tg-lightbox-prev {
+    left: 10px;
+  }
+
+  .tg-lightbox-next {
+    right: 10px;
+  }
+
+  .tg-lightbox-caption {
+    font-size: 14px;
+    margin-top: 15px;
+  }
+}
+
+/* ============================================
+   CUSTOMIZATION EXAMPLES
+   Copy and paste these into your embed code!
+   ============================================ */
+
+/*
+EXAMPLE 1: Dark theme with red accents
+---------------------------------------
+.tattoo-gallery {
+  --tg-primary-color: #ff4444;
+  --tg-bg-color: #1a1a1a;
+  --tg-text-color: #ffffff;
+}
+
+EXAMPLE 2: Minimal black & white
+---------------------------------------
+.tattoo-gallery {
+  --tg-primary-color: #000000;
+  --tg-bg-color: #ffffff;
+  --tg-text-color: #000000;
+  --tg-hover-scale: 1.02;
+  --tg-border-radius: 0;
+}
+
+EXAMPLE 3: 4-column wide gallery
+---------------------------------------
+.tattoo-gallery {
+  --tg-columns-desktop: 4;
+  --tg-columns-tablet: 3;
+  --tg-gap: 12px;
+}
+
+EXAMPLE 4: Branded colors
+---------------------------------------
+.tattoo-gallery {
+  --tg-primary-color: #your-brand-color;
+  --tg-bg-color: #your-bg-color;
+  --tg-text-color: #your-text-color;
+}
+
+EXAMPLE 5: No zoom, square images, tight grid
+---------------------------------------
+.tattoo-gallery {
+  --tg-hover-scale: 1.0;
+  --tg-gap: 8px;
+  --tg-border-radius: 4px;
+}
+*/
