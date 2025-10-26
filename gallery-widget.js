@@ -120,7 +120,8 @@
 
       const img = document.createElement('img');
       img.className = 'tg-img tg-lazy';
-      img.dataset.src = image.thumbnailUrl || image.fullUrl;
+      // Use proxied image URL for thumbnails (800px for grid)
+      img.dataset.src = `${CONFIG.apiUrl.replace('/gallery', '')}/image/${image.id}?size=s800`;
       img.alt = image.name;
 
       const overlay = document.createElement('div');
@@ -297,11 +298,9 @@
       // Show loading state
       img.style.opacity = '0';
 
-      // IMPORTANT: Only use thumbnail URLs - they have proper CORS headers
-      // Google Drive's "uc?export=view" URLs are blocked by browser CORS policy
-      const imageUrl = image.thumbnailUrl
-        ? image.thumbnailUrl.replace(/=s\d+/, '=s2000')  // Request 2000px high-res version
-        : image.thumbnailUrl;  // Always use thumbnail URL
+      // Use proxied image URL for lightbox (2000px high-res)
+      // This avoids CORS issues with direct Google Drive URLs
+      const imageUrl = `${CONFIG.apiUrl.replace('/gallery', '')}/image/${image.id}?size=s2000`;
 
       img.src = imageUrl;
       img.alt = image.name;
@@ -316,8 +315,8 @@
 
       // Handle load error
       img.onerror = () => {
-        console.error('Failed to load image:', image.name);
-        caption.textContent = `${image.name} (Failed to load)`;
+        console.error('Failed to load image:', image.name, imageUrl);
+        img.style.opacity = '0.3';
       };
 
       // Show/hide nav buttons
