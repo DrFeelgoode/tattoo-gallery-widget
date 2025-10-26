@@ -83,14 +83,21 @@
   background: #f0f0f0;
   cursor: pointer;
   aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* Force perfect square */
 }
 
 .tg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
-  transition: transform var(--tg-transition-speed), filter var(--tg-transition-speed);
+  transition: transform var(--tg-transition-speed), filter var(--tg-transition-speed), opacity var(--tg-transition-speed);
   opacity: 0;
 }
 
@@ -326,15 +333,38 @@
   height: 32px;
 }
 
+/* Mobile & Tablet Responsive Adjustments */
+@media (max-width: 1024px) {
+  .tg-img-wrapper:hover .tg-img {
+    transform: scale(1.0); /* Disable hover zoom on touch devices */
+  }
+
+  .tg-img-wrapper:active .tg-img {
+    transform: scale(0.98); /* Subtle press effect */
+  }
+
+  .tg-overlay {
+    opacity: 0 !important; /* Hide overlay on touch devices */
+  }
+}
+
 /* Mobile Lightbox Adjustments */
 @media (max-width: 640px) {
+  .tg-grid {
+    gap: calc(var(--tg-gap) * 0.75); /* Smaller gaps on mobile */
+  }
+
   .tg-lightbox-content {
     padding: 10px;
   }
 
   .tg-lightbox-image-container {
-    max-width: 95%;
-    max-height: 70%;
+    max-width: 100%;
+    max-height: 75%;
+  }
+
+  .tg-lightbox-image {
+    border-radius: 4px; /* Less rounded on mobile */
   }
 
   .tg-lightbox-counter {
@@ -347,8 +377,10 @@
   .tg-lightbox-close {
     top: 10px;
     right: 10px;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.7); /* More visible on mobile */
+    backdrop-filter: none;
   }
 
   .tg-lightbox-close svg {
@@ -357,8 +389,10 @@
   }
 
   .tg-lightbox-nav {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
+    background: rgba(0,0,0,0.7); /* More visible on mobile */
+    backdrop-filter: none;
   }
 
   .tg-lightbox-nav svg {
@@ -367,16 +401,33 @@
   }
 
   .tg-lightbox-prev {
-    left: 10px;
+    left: 5px;
   }
 
   .tg-lightbox-next {
-    right: 10px;
+    right: 5px;
   }
 
   .tg-lightbox-caption {
-    font-size: 14px;
-    margin-top: 15px;
+    font-size: 13px;
+    margin-top: 10px;
+    padding: 0 10px;
+  }
+
+  /* Add loading spinner for lightbox images */
+  .tg-lightbox-image-container::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: tg-spin 0.8s linear infinite;
+  }
+
+  .tg-lightbox-image-container:has(img[src]:not([src=""])) ::before {
+    display: none;
   }
 }
 
