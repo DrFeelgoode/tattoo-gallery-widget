@@ -304,25 +304,27 @@
   transform: translateY(-50%);
   width: 60px;
   height: 60px;
-  background: rgba(255,255,255,0.1);
-  border: 2px solid white;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background var(--tg-transition-speed), transform var(--tg-transition-speed);
+  transition: background var(--tg-transition-speed), transform var(--tg-transition-speed), border-color var(--tg-transition-speed);
   color: white;
   backdrop-filter: blur(10px);
-  z-index: 2;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .tg-lightbox-nav:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(0, 0, 0, 0.8);
+  border-color: white;
 }
 
 .tg-lightbox-prev {
-  left: 20px;
+  left: 10px;
 }
 
 .tg-lightbox-prev:hover {
@@ -330,7 +332,7 @@
 }
 
 .tg-lightbox-next {
-  right: 20px;
+  right: 10px;
 }
 
 .tg-lightbox-next:hover {
@@ -340,6 +342,7 @@
 .tg-lightbox-nav svg {
   width: 32px;
   height: 32px;
+  stroke-width: 2.5;
 }
 
 /* Mobile & Tablet Responsive Adjustments */
@@ -398,23 +401,25 @@
   }
 
   .tg-lightbox-nav {
-    width: 50px;
-    height: 50px;
-    background: rgba(0,0,0,0.7); /* More visible on mobile */
+    width: 48px;
+    height: 48px;
+    background: rgba(0,0,0,0.75); /* More visible on mobile */
     backdrop-filter: none;
+    border: 2px solid rgba(255, 255, 255, 0.9);
   }
 
   .tg-lightbox-nav svg {
     width: 24px;
     height: 24px;
+    stroke-width: 3;
   }
 
   .tg-lightbox-prev {
-    left: 5px;
+    left: 8px;
   }
 
   .tg-lightbox-next {
-    right: 5px;
+    right: 8px;
   }
 
   .tg-lightbox-caption {
